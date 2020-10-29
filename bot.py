@@ -33,10 +33,11 @@ async def on_ready():
 @bot.command()
 async def helpme(ctx):
     await ctx.send("```Available Commands: \
-     \n\t.flip_coin: Flip a coin \
-     \n\t.escape: YOU MUST ESCAPE FROM THE TARKOV \
-     \n\t.memeofday: Fetches top post from /r/memes for the day. \
-     \n\t.top [subreddit] [count]: fetches top X posts from subreddit.```")
+     \n\t!escape: YOU MUST ESCAPE FROM THE TARKOV \
+     \n\t!flip_coin: Flip a coin \
+     \n\t!karma [user] [++/--] \
+     \n\t!memeofday: Fetches top post from /r/memes for the day! \
+     \n\t!top [subreddit] [count]: fetches top X posts from subreddit.```")
 
 @bot.command()
 async def escape(ctx):
@@ -80,6 +81,8 @@ async def karma(ctx, user: Member, action):
     users_ref.set({
         u'karma': karma
     })
-    await ctx.send(f"{user.name} you now have {str(karma)} points")
+    point_str = "point" if karma == 1 else "points"
+    message = f""
+    await ctx.send(f"{user.name} you now have {str(karma)} {point_str}")
 
 bot.run(TOKEN)
