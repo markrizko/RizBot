@@ -37,6 +37,7 @@ async def helpme(ctx):
      \n\t!flip_coin: Flip a coin \
      \n\t!karma [user] [++/--] \
      \n\t!memeofday: Fetches top post from /r/memes for the day! \
+     \n\t!rank: Display karma leaderboards \
      \n\t!top [subreddit] [count]: fetches top X posts from subreddit.```")
 
 @bot.command()
@@ -62,6 +63,22 @@ async def top(ctx, sub, count=1):
     posts = reddit.subreddit(sub).top('day', limit=count)
     for post in posts:
         await ctx.send(post.url)
+
+@bot.command()
+async def rank(ctx):
+    guild = discord.utils.get(bot.guilds, name=GUILD)
+    users_ref = db.collection(guild.name)
+    query = users_ref.order_by(
+    u'karma', direction=firestore.Query.DESCENDING)
+    results = query.get()
+    place = 1
+    top_charts = "```Leaderboard:"
+    for result in results:
+        karma = result.get("karma")
+        member = guild.get_member(int(result.id))
+        top_charts = top_charts + f"\n\t {place}. {member.name}: {karma}"
+        place += 1
+    await ctx.send(top_charts + "```")
 
 @bot.command()
 async def karma(ctx, user: Member, action):
