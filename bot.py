@@ -82,7 +82,6 @@ async def karma(ctx, user: Member, action):
         u'karma': karma
     })
     point_str = "point" if karma == 1 else "points"
-    message = f""
     await ctx.send(f"{user.name} you now have {str(karma)} {point_str}")
 
 bot.run(TOKEN)
